@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MessageStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum Platform {
+  TELEGRAM
+  DISCORD
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+
+  messages  Message[]
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  deliveries MessageDelivery[]
+}
+
+model MessageDelivery {
+  id               String        @id @default(uuid())
+  platform         Platform
+  status           MessageStatus @default(PENDING)
+  providerResponse String?
+  createdAt        DateTime      @default(now())
+
+  messageId        String
+  message          Message       @relation(fields: [messageId], references: [id])
+}
