@@ -24,8 +24,10 @@ router.use(authenticate)
  *             properties:
  *               content:
  *                 type: string
+ *                 example: "Hola desde Notification Hub!"
  *               platforms:
  *                 type: array
+ *                 example: ["DISCORD", "TELEGRAM"]
  *                 items:
  *                   type: string
  *                   enum: [DISCORD, TELEGRAM]
