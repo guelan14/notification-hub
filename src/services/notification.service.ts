@@ -1,6 +1,7 @@
 import { sendDiscordMessage } from './discord.service'
+import { sendTelegramMessage } from './telegram.service'
 
-export type Platform = 'DISCORD'
+export type Platform = 'DISCORD' | 'TELEGRAM'
 
 export interface DeliveryResult {
   platform: Platform
@@ -17,6 +18,10 @@ export const sendToplatforms = async (
     platforms.map(async (platform) => {
       if (platform === 'DISCORD') {
         const response = await sendDiscordMessage(content, username)
+        return { platform, status: 'SUCCESS' as const, providerResponse: response }
+      }
+      if (platform === 'TELEGRAM') {
+        const response = await sendTelegramMessage(content, username)
         return { platform, status: 'SUCCESS' as const, providerResponse: response }
       }
       throw new Error(`Unknown platform: ${platform}`)

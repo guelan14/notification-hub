@@ -28,7 +28,7 @@ router.use(authenticate)
  *                 type: array
  *                 items:
  *                   type: string
- *                   enum: [DISCORD]
+ *                   enum: [DISCORD, TELEGRAM]
  *     responses:
  *       201:
  *         description: Message sent and persisted
@@ -55,7 +55,7 @@ router.post('/', messageController.sendMessage)
  *         name: platform
  *         schema:
  *           type: string
- *           enum: [DISCORD]
+ *           enum: [DISCORD, TELEGRAM]
  *       - in: query
  *         name: from
  *         schema:
