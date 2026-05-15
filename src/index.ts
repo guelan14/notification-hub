@@ -70,7 +70,6 @@ app.get('/', (req, res) => {
           <p class="subtitle">Enviá mensajes a múltiples plataformas desde un solo lugar.</p>
           <div class="links">
             <a href="/docs" class="btn btn-primary">Ver documentación</a>
-            <a href="/health" class="btn btn-secondary">Health check</a>
           </div>
           <div class="footer">
             Desarrollado por <span>Neumann Miguel Angel</span>
