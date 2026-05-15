@@ -30,6 +30,8 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   build:
     runs-on: ubuntu-latest
