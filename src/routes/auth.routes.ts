@@ -20,9 +20,11 @@ const router = Router()
  *               username:
  *                 type: string
  *                 minLength: 3
+ *                 example: "john_doe"
  *               password:
  *                 type: string
  *                 minLength: 6
+ *                 example: "password123"
  *     responses:
  *       201:
  *         description: User created
@@ -47,8 +49,10 @@ router.post('/register', authController.register)
  *             properties:
  *               username:
  *                 type: string
+ *                 example: "sirius_black"
  *               password:
  *                 type: string
+ *                 example: "password123"
  *     responses:
  *       200:
  *         description: JWT token
