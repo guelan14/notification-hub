@@ -1,11 +1,11 @@
-import type { Config } from 'jest'
+import type { Config } from 'jest';
 
 const config: Config = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
   testMatch: ['**/__tests__/**/*.test.ts'],
-  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts']
-}
+  collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts'],
+};
 
-export default config
+export default config;
