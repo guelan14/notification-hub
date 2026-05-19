@@ -7,9 +7,10 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install --frozen-lockfile --ignore-scripts
-RUN pnpm approve-builds --all && pnpm rebuild
 
 COPY . .
+
+RUN pnpm approve-builds --all && pnpm rebuild
 
 RUN pnpm exec prisma generate
 
