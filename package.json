@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "predev": "prisma generate",
     "dev": "nodemon --exec tsx src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "tsx src/seed.ts",
+    "postinstall": "prisma generate",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

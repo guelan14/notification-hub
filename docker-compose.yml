@@ -20,7 +20,7 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: postgresql://admin:admin123@postgres:5432/notification_hub
-      JWT_SECRET: un_secreto_largo_y_seguro_cambiar_en_produccion
+      JWT_SECRET: ${JWT_SECRET}
       PORT: 3000
       DAILY_MESSAGE_LIMIT: 100
       DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
