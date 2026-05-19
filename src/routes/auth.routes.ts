@@ -9,6 +9,7 @@ const router = Router();
  *   post:
  *     tags: [Auth]
  *     summary: Register a new user
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -28,8 +29,30 @@ const router = Router();
  *     responses:
  *       201:
  *         description: User created
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       409:
  *         description: Username already taken
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       503:
+ *         description: Database connection error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/register', authController.register);
 
@@ -39,6 +62,7 @@ router.post('/register', authController.register);
  *   post:
  *     tags: [Auth]
  *     summary: Login and get JWT token
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -56,8 +80,30 @@ router.post('/register', authController.register);
  *     responses:
  *       200:
  *         description: JWT token
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       503:
+ *         description: Database connection error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/login', authController.login);
 
