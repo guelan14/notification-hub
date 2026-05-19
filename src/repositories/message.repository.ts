@@ -1,5 +1,5 @@
-import prisma from '../config/prisma'
-import { Platform, MessageStatus } from '@prisma/client'
+import prisma from '../config/prisma';
+import { Platform, MessageStatus } from '@prisma/client';
 
 export const createMessage = async (
   userId: string,
@@ -14,21 +14,21 @@ export const createMessage = async (
         create: deliveries.map((d) => ({
           platform: d.platform,
           status: d.status,
-          providerResponse: d.providerResponse
-        }))
-      }
+          providerResponse: d.providerResponse,
+        })),
+      },
     },
-    include: { deliveries: true }
-  })
-}
+    include: { deliveries: true },
+  });
+};
 
 export const getMessagesByUser = async (
   userId: string,
   filters: {
-    status?: MessageStatus
-    platform?: Platform
-    from?: Date
-    to?: Date
+    status?: MessageStatus;
+    platform?: Platform;
+    from?: Date;
+    to?: Date;
   }
 ) => {
   return prisma.message.findMany({
@@ -37,40 +37,40 @@ export const getMessagesByUser = async (
       deliveries: {
         some: {
           ...(filters.status && { status: filters.status }),
-          ...(filters.platform && { platform: filters.platform })
-        }
+          ...(filters.platform && { platform: filters.platform }),
+        },
       },
       ...(filters.from || filters.to
         ? {
             createdAt: {
               ...(filters.from && { gte: filters.from }),
-              ...(filters.to && { lte: filters.to })
-            }
+              ...(filters.to && { lte: filters.to }),
+            },
           }
-        : {})
+        : {}),
     },
     include: { deliveries: true },
-    orderBy: { createdAt: 'desc' }
-  })
-}
+    orderBy: { createdAt: 'desc' },
+  });
+};
 
 export const getAllMessages = async () => {
   return prisma.message.findMany({
     include: { deliveries: true, user: { select: { username: true } } },
-    orderBy: { createdAt: 'desc' }
-  })
-}
+    orderBy: { createdAt: 'desc' },
+  });
+};
 
 export const countTodayMessages = async (userId: string): Promise<number> => {
-  const start = new Date()
-  start.setHours(0, 0, 0, 0)
-  const end = new Date()
-  end.setHours(23, 59, 59, 999)
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
 
   return prisma.message.count({
     where: {
       userId,
-      createdAt: { gte: start, lte: end }
-    }
-  })
-}
+      createdAt: { gte: start, lte: end },
+    },
+  });
+};

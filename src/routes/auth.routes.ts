@@ -1,7 +1,7 @@
-import { Router } from 'express'
-import * as authController from '../controllers/auth.controller'
+import { Router } from 'express';
+import * as authController from '../controllers/auth.controller';
 
-const router = Router()
+const router = Router();
 
 /**
  * @openapi
@@ -31,7 +31,7 @@ const router = Router()
  *       409:
  *         description: Username already taken
  */
-router.post('/register', authController.register)
+router.post('/register', authController.register);
 
 /**
  * @openapi
@@ -59,6 +59,6 @@ router.post('/register', authController.register)
  *       401:
  *         description: Invalid credentials
  */
-router.post('/login', authController.login)
+router.post('/login', authController.login);
 
-export default router
+export default router;

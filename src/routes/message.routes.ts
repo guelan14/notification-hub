@@ -1,10 +1,10 @@
-import { Router } from 'express'
-import { authenticate, requireAdmin } from '../middlewares/auth.middleware'
-import * as messageController from '../controllers/message.controller'
+import { Router } from 'express';
+import { authenticate, requireAdmin } from '../middlewares/auth.middleware';
+import * as messageController from '../controllers/message.controller';
 
-const router = Router()
+const router = Router();
 
-router.use(authenticate)
+router.use(authenticate);
 
 /**
  * @openapi
@@ -37,7 +37,7 @@ router.use(authenticate)
  *       429:
  *         description: Daily limit exceeded
  */
-router.post('/', messageController.sendMessage)
+router.post('/', messageController.sendMessage);
 
 /**
  * @openapi
@@ -72,7 +72,7 @@ router.post('/', messageController.sendMessage)
  *       200:
  *         description: List of messages
  */
-router.get('/', messageController.getMessages)
+router.get('/', messageController.getMessages);
 
 /**
  * @openapi
@@ -88,6 +88,6 @@ router.get('/', messageController.getMessages)
  *       403:
  *         description: Admin access required
  */
-router.get('/metrics', requireAdmin, messageController.getMetrics)
+router.get('/metrics', requireAdmin, messageController.getMetrics);
 
-export default router
+export default router;

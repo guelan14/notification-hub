@@ -1,4 +1,4 @@
-import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerJsdoc from 'swagger-jsdoc';
 
 const options = {
   definition: {
@@ -20,6 +20,6 @@ const options = {
     security: [{ bearerAuth: [] }],
   },
   apis: ['./src/routes/*.ts'],
-}
+};
 
-export const swaggerSpec = swaggerJsdoc(options)
+export const swaggerSpec = swaggerJsdoc(options);
