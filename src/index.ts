@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.routes';
 import messageRoutes from './routes/message.routes';
 import errorHandler from './middlewares/error.handler';
 import { swaggerSpec } from './config/swagger';
+import HttpError from './errors/HttpError';
 
 dotenv.config();
 
@@ -20,8 +21,7 @@ app.use('/messages', messageRoutes);
 
 // Endpoint de prueba de errores
 app.get('/error-test', (_req, _res, next) => {
-  const err = new (require('./errors/HttpError').default)('Esto es un error de prueba', 418, 'TEST_ERROR');
-  next(err);
+  next(new HttpError('This is a test error', 418, 'TEST_ERROR'));
 });
 
 // Error handler (should be registered after routes)

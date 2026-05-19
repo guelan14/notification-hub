@@ -9,6 +9,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
+  void _next;
   // Prisma error detection (KnownRequestError, InitializationError, etc.)
   if (err && typeof err === 'object' && 'name' in err && typeof err.name === 'string' && err.name.startsWith('Prisma')) {
     logger.error(err);
