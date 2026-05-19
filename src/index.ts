@@ -1,20 +1,31 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import swaggerUi from 'swagger-ui-express'
-import authRoutes from './routes/auth.routes'
-import messageRoutes from './routes/message.routes'
-import { swaggerSpec } from './config/swagger'
+import express from 'express';
+import dotenv from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
+import authRoutes from './routes/auth.routes';
+import messageRoutes from './routes/message.routes';
+import errorHandler from './middlewares/error.handler';
+import { swaggerSpec } from './config/swagger';
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
-const PORT = process.env.PORT || 3000
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json())
+app.use(express.json());
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-app.use('/auth', authRoutes)
-app.use('/messages', messageRoutes)
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/auth', authRoutes);
+app.use('/messages', messageRoutes);
+
+// Endpoint de prueba de errores
+app.get('/error-test', (_req, _res, next) => {
+  const err = new (require('./errors/HttpError').default)('Esto es un error de prueba', 418, 'TEST_ERROR');
+  next(err);
+});
+
+// Error handler (should be registered after routes)
+app.use(errorHandler);
 
 app.get('/', (req, res) => {
   res.send(`
@@ -77,16 +88,16 @@ app.get('/', (req, res) => {
         </div>
       </body>
     </html>
-  `)
-})
+  `);
+});
 
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok' })
-})
+  res.json({ status: 'ok' });
+});
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-  console.log(`Swagger UI: http://localhost:${PORT}/docs`)
-})
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Swagger UI: http://localhost:${PORT}/docs`);
+});
 
-export default app
+export default app;
