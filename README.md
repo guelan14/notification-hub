@@ -12,21 +12,21 @@ Desarrollado por **Neumann Miguel Angel**
 
 ## Stack
 
-| Categoría | Tecnología |
-|-----------|------------|
-| Runtime | Node.js 24 |
-| Lenguaje | TypeScript |
-| Framework | Express.js |
-| Base de datos | PostgreSQL |
-| ORM | Prisma 7 |
-| Autenticación | JWT + bcrypt |
-| Validaciones | Zod |
-| HTTP Client | Axios |
+| Categoría     | Tecnología               |
+| ------------- | ------------------------ |
+| Runtime       | Node.js 24               |
+| Lenguaje      | TypeScript               |
+| Framework     | Express.js               |
+| Base de datos | PostgreSQL               |
+| ORM           | Prisma 7                 |
+| Autenticación | JWT + bcrypt             |
+| Validaciones  | Zod                      |
+| HTTP Client   | Axios                    |
 | Documentación | Swagger UI (OpenAPI 3.0) |
-| Testing | Jest + ts-jest |
-| Contenedores | Docker + Docker Compose |
-| CI/CD | GitHub Actions |
-| Deploy | Render |
+| Testing       | Jest + ts-jest           |
+| Contenedores  | Docker + Docker Compose  |
+| CI/CD         | GitHub Actions           |
+| Deploy        | Render                   |
 
 ---
 
@@ -102,18 +102,18 @@ TELEGRAM_CHAT_ID=
 
 ### Auth
 
-| Método | Endpoint | Descripción | Auth |
-|--------|----------|-------------|------|
-| POST | `/auth/register` | Registrar nuevo usuario | — |
-| POST | `/auth/login` | Login, devuelve JWT | — |
+| Método | Endpoint         | Descripción             | Auth |
+| ------ | ---------------- | ----------------------- | ---- |
+| POST   | `/auth/register` | Registrar nuevo usuario | —    |
+| POST   | `/auth/login`    | Login, devuelve JWT     | —    |
 
 ### Messages
 
-| Método | Endpoint | Descripción | Auth |
-|--------|----------|-------------|------|
-| POST | `/messages` | Enviar mensaje a una o más plataformas | JWT |
-| GET | `/messages` | Listar mensajes propios con filtros | JWT |
-| GET | `/messages/metrics` | Métricas por usuario (solo admin) | JWT + Admin |
+| Método | Endpoint            | Descripción                            | Auth        |
+| ------ | ------------------- | -------------------------------------- | ----------- |
+| POST   | `/messages`         | Enviar mensaje a una o más plataformas | JWT         |
+| GET    | `/messages`         | Listar mensajes propios con filtros    | JWT         |
+| GET    | `/messages/metrics` | Métricas por usuario (solo admin)      | JWT + Admin |
 
 **Filtros disponibles en `GET /messages`:**
 
