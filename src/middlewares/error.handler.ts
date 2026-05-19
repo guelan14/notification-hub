@@ -3,6 +3,7 @@ import HttpError from '../errors/HttpError';
 import logger from '../utils/logger';
 import { ERROR_CODES } from '../constants/errors';
 
+export const errorHandler = (
   err: unknown,
   _req: Request,
   res: Response,
