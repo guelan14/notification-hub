@@ -20,6 +20,7 @@ enum MessageStatus {
 enum Platform {
   TELEGRAM
   DISCORD
+  SLACK
 }
 
 model User {
