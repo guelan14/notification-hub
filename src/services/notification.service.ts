@@ -1,4 +1,5 @@
 import { sendDiscordMessage } from './discord.service';
+import { sendSlackMessage } from './slack.service';
 import { sendTelegramMessage } from './telegram.service';
 import { Platform as PrismaPlatform } from '@prisma/client';
 
@@ -23,6 +24,10 @@ export const sendToplatforms = async (
       }
       if (platform === 'TELEGRAM') {
         const response = await sendTelegramMessage(content, username);
+        return { platform, status: 'SUCCESS' as const, providerResponse: response };
+      }
+      if (platform === 'SLACK') {
+        const response = await sendSlackMessage(content, username);
         return { platform, status: 'SUCCESS' as const, providerResponse: response };
       }
       throw new Error(`Unknown platform: ${platform}`);
