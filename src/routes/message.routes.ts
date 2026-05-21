@@ -27,10 +27,10 @@ router.use(authenticate);
  *                 example: "Hola desde Notification Hub!"
  *               platforms:
  *                 type: array
- *                 example: ["DISCORD", "TELEGRAM"]
+ *                 example: ["DISCORD", "TELEGRAM", "SLACK"]
  *                 items:
  *                   type: string
- *                   enum: [DISCORD, TELEGRAM]
+ *                   enum: [DISCORD, TELEGRAM, SLACK]
  *     responses:
  *       201:
  *         description: Message sent and persisted
@@ -91,7 +91,7 @@ router.post('/', messageController.sendMessage);
  *         name: platform
  *         schema:
  *           type: string
- *           enum: [DISCORD, TELEGRAM]
+ *           enum: [DISCORD, TELEGRAM, SLACK]
  *       - in: query
  *         name: from
  *         schema:
