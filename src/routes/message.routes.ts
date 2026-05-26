@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { authenticate, requireAdmin } from '../middlewares/auth.middleware';
+import { authenticate } from '../middlewares/auth.middleware';
+import { authorize } from '../middlewares/authorize';
 import * as messageController from '../controllers/message.controller';
 
 const router = Router();
@@ -162,6 +163,6 @@ router.get('/', messageController.getMessages);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/metrics', requireAdmin, messageController.getMetrics);
+router.get('/metrics', authorize('metrics:read'), messageController.getMetrics);
 
 export default router;
