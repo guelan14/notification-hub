@@ -54,3 +54,19 @@ model MessageDelivery {
   messageId        String
   message          Message       @relation(fields: [messageId], references: [id])
 }
+
+model Permission {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String?
+
+  rolePermissions RolePermission[]
+}
+
+model RolePermission {
+  role         Role
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([role, permissionId])
+}
