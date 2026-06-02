@@ -3,11 +3,12 @@ import jwt from 'jsonwebtoken';
 import { findUserByUsername, createUser } from '../repositories/user.repository';
 import HttpError from '../errors/HttpError';
 import { ERROR_CODES } from '../constants/errors';
+import { AuthUserResponseDto, TokenResponseDto, toAuthUserResponse } from '../dtos/auth.dto';
 
 const SALT_ROUNDS = 10;
 
 
-export const register = async (username: string, password: string) => {
+export const register = async (username: string, password: string): Promise<AuthUserResponseDto> => {
   const existing = await findUserByUsername(username);
   if (existing) {
     const err = ERROR_CODES.AUTH_USERNAME_TAKEN;
@@ -17,11 +18,11 @@ export const register = async (username: string, password: string) => {
   const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
   const user = await createUser(username, hashedPassword);
 
-  return { id: user.id, username: user.username, role: user.role };
+  return toAuthUserResponse(user);
 };
 
 
-export const login = async (username: string, password: string) => {
+export const login = async (username: string, password: string): Promise<TokenResponseDto> => {
   const user = await findUserByUsername(username);
   if (!user) {
     const err = ERROR_CODES.AUTH_INVALID_CREDENTIALS;

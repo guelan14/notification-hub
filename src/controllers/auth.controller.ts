@@ -1,14 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { z } from 'zod';
 import * as authService from '../services/auth.service';
-
-const authSchema = z.object({
-  username: z.string().min(3),
-  password: z.string().min(6),
-});
+import { authRequestSchema } from '../dtos/auth.dto';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-  const result = authSchema.safeParse(req.body);
+  const result = authRequestSchema.safeParse(req.body);
   if (!result.success) {
     res.status(400).json({ error: result.error.flatten() });
     return;
@@ -23,7 +18,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 };
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
-  const result = authSchema.safeParse(req.body);
+  const result = authRequestSchema.safeParse(req.body);
   if (!result.success) {
     res.status(400).json({ error: result.error.flatten() });
     return;
