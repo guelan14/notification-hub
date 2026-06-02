@@ -14,3 +14,10 @@ export const createUser = (username: string, hashedPassword: string, role: Role 
     data: { username, password: hashedPassword, role },
   });
 };
+
+export const getAllUsers = () => {
+  return prisma.user.findMany({
+    select: { id: true, username: true },
+    orderBy: { username: 'asc' },
+  });
+};
