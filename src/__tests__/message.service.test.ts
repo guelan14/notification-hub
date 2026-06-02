@@ -7,12 +7,16 @@ jest.mock('../repositories/message.repository');
 jest.mock('../repositories/user.repository');
 jest.mock('../services/notification.service');
 
-const mockCountToday = messageRepository.countTodayMessages as jest.Mock;
-const mockFindUser = userRepository.findUserById as jest.Mock;
-const mockSendTo = notificationService.sendToplatforms as jest.Mock;
-const mockCreateMessage = messageRepository.createMessage as jest.Mock;
-const mockGetMessages = messageRepository.getMessagesByUser as jest.Mock;
-const mockGetAllMessages = messageRepository.getAllMessages as jest.Mock;
+const mockCountToday      = messageRepository.countTodayMessages as jest.Mock;
+const mockFindUser        = userRepository.findUserById as jest.Mock;
+const mockSendTo          = notificationService.sendToplatforms as jest.Mock;
+const mockCreateMessage   = messageRepository.createMessage as jest.Mock;
+const mockGetMessages     = messageRepository.getMessagesByUser as jest.Mock;
+const mockGetAllUsers     = userRepository.getAllUsers as jest.Mock;
+const mockGroupedTotal    = messageRepository.getMessageCountsGroupedByUser as jest.Mock;
+const mockGroupedToday    = messageRepository.getTodayMessageCountsGroupedByUser as jest.Mock;
+
+const DEFAULT_FILTERS = { page: 1, limit: 20 };
 
 describe('message.service', () => {
   beforeEach(() => jest.clearAllMocks());
@@ -69,9 +73,9 @@ describe('message.service', () => {
       mockCountToday.mockResolvedValue(0);
       mockFindUser.mockResolvedValue(null);
 
-      await expect(messageService.sendMessage('invalid-user', 'hello', ['DISCORD'] as any)).rejects.toThrow(
-        'User not found'
-      );
+      await expect(
+        messageService.sendMessage('invalid-user', 'hello', ['DISCORD'] as any)
+      ).rejects.toThrow('User not found');
     });
 
     it('should persist FAILED status when platform fails', async () => {
@@ -94,32 +98,52 @@ describe('message.service', () => {
   });
 
   describe('getUserMessages', () => {
-    it('should return messages for user', async () => {
-      mockGetMessages.mockResolvedValue([
-        { id: 'msg-1', content: 'hello', platform: 'DISCORD' },
-      ]);
+    it('should return paginated messages for user', async () => {
+      mockGetMessages.mockResolvedValue({
+        messages: [{ id: 'msg-1', content: 'hello', createdAt: new Date(), deliveries: [] }],
+        total: 1,
+      });
 
-      const result = await messageService.getUserMessages('user-1', {});
+      const result = await messageService.getUserMessages('user-1', DEFAULT_FILTERS);
 
-      expect(mockGetMessages).toHaveBeenCalledWith('user-1', {});
-      expect(result).toHaveLength(1);
+      expect(mockGetMessages).toHaveBeenCalledWith('user-1', DEFAULT_FILTERS);
+      expect(result.data).toHaveLength(1);
+      expect(result.pagination.total).toBe(1);
+      expect(result.pagination.totalPages).toBe(1);
+      expect(result.pagination.page).toBe(1);
+      expect(result.pagination.limit).toBe(20);
+    });
+
+    it('should calculate totalPages correctly', async () => {
+      mockGetMessages.mockResolvedValue({ messages: [], total: 55 });
+
+      const result = await messageService.getUserMessages('user-1', { page: 2, limit: 20 });
+
+      expect(result.pagination.totalPages).toBe(3);
+      expect(result.pagination.page).toBe(2);
     });
   });
 
   describe('getAdminMetrics', () => {
-    it('should return metrics for all users', async () => {
-      mockGetAllMessages.mockResolvedValue([
-        {
-          userId: 'user-1',
-          user: { username: 'testuser' },
-          createdAt: new Date(),
-        },
+    it('should return metrics for all users including those with no messages', async () => {
+      mockGetAllUsers.mockResolvedValue([
+        { id: 'user-1', username: 'alice' },
+        { id: 'user-2', username: 'bob' },
       ]);
+      mockGroupedTotal.mockResolvedValue([{ userId: 'user-1', _count: { id: 3 } }]);
+      mockGroupedToday.mockResolvedValue([{ userId: 'user-1', _count: { id: 1 } }]);
 
       const result = await messageService.getAdminMetrics();
 
-      expect(result).toHaveLength(1);
-      expect(result[0].username).toBe('testuser');
+      expect(result).toHaveLength(2);
+
+      const alice = result.find((r) => r.username === 'alice')!;
+      expect(alice.totalMessages).toBe(3);
+      expect(alice.remainingToday).toBe(99);
+
+      const bob = result.find((r) => r.username === 'bob')!;
+      expect(bob.totalMessages).toBe(0);
+      expect(bob.remainingToday).toBe(100);
     });
   });
 });

@@ -29,35 +29,61 @@ export const getMessagesByUser = async (
     platform?: Platform;
     from?: Date;
     to?: Date;
+    page: number;
+    limit: number;
   }
 ) => {
-  return prisma.message.findMany({
-    where: {
-      userId,
-      deliveries: {
-        some: {
-          ...(filters.status && { status: filters.status }),
-          ...(filters.platform && { platform: filters.platform }),
-        },
+  const where = {
+    userId,
+    deliveries: {
+      some: {
+        ...(filters.status && { status: filters.status }),
+        ...(filters.platform && { platform: filters.platform }),
       },
-      ...(filters.from || filters.to
-        ? {
-            createdAt: {
-              ...(filters.from && { gte: filters.from }),
-              ...(filters.to && { lte: filters.to }),
-            },
-          }
-        : {}),
     },
-    include: { deliveries: true },
-    orderBy: { createdAt: 'desc' },
-  });
+    ...(filters.from || filters.to
+      ? {
+          createdAt: {
+            ...(filters.from && { gte: filters.from }),
+            ...(filters.to && { lte: filters.to }),
+          },
+        }
+      : {}),
+  };
+
+  const [messages, total] = await Promise.all([
+    prisma.message.findMany({
+      where,
+      include: { deliveries: true },
+      orderBy: { createdAt: 'desc' },
+      skip: (filters.page - 1) * filters.limit,
+      take: filters.limit,
+    }),
+    prisma.message.count({ where }),
+  ]);
+
+  return { messages, total };
 };
 
 export const getAllMessages = async () => {
   return prisma.message.findMany({
     include: { deliveries: true, user: { select: { username: true } } },
     orderBy: { createdAt: 'desc' },
+  });
+};
+
+export const getMessageCountsGroupedByUser = async () => {
+  return prisma.message.groupBy({
+    by: ['userId'],
+    _count: { id: true },
+  });
+};
+
+export const getTodayMessageCountsGroupedByUser = async (since: Date) => {
+  return prisma.message.groupBy({
+    by: ['userId'],
+    _count: { id: true },
+    where: { createdAt: { gte: since } },
   });
 };
 
