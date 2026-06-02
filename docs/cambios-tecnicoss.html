@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notification Hub — Documentación de Cambios</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 13px;
+      color: #1a1a2e;
+      background: #fff;
+      padding: 48px 64px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Encabezado ── */
+    .cover {
+      border-bottom: 3px solid #3b5bdb;
+      padding-bottom: 28px;
+      margin-bottom: 36px;
+    }
+    .cover h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1c2a6e;
+      letter-spacing: -0.5px;
+    }
+    .cover .subtitle {
+      font-size: 14px;
+      color: #555;
+      margin-top: 6px;
+    }
+    .cover .meta {
+      margin-top: 14px;
+      font-size: 12px;
+      color: #888;
+    }
+    .cover .meta span { margin-right: 24px; }
+
+    /* ── TOC ── */
+    .toc {
+      background: #f8f9ff;
+      border-left: 4px solid #3b5bdb;
+      padding: 18px 24px;
+      margin-bottom: 40px;
+      border-radius: 4px;
+    }
+    .toc h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #3b5bdb; margin-bottom: 10px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { line-height: 2; font-size: 13px; color: #333; }
+    .toc a { color: #3b5bdb; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ── Secciones ── */
+    section { margin-bottom: 44px; }
+
+    h2.section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1c2a6e;
+      border-bottom: 2px solid #e8ecff;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #3b5bdb;
+      margin: 20px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p { line-height: 1.7; color: #333; margin-bottom: 10px; }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-size: 12.5px;
+      line-height: 1.65;
+    }
+    .callout.problem { background: #fff3f3; border-left: 4px solid #e03131; }
+    .callout.solution { background: #f0fff4; border-left: 4px solid #2f9e44; }
+    .callout.info { background: #f8f9ff; border-left: 4px solid #3b5bdb; }
+    .callout strong { display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .callout.problem strong { color: #c92a2a; }
+    .callout.solution strong { color: #2f9e44; }
+    .callout.info strong { color: #3b5bdb; }
+
+    /* ── Tablas ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 12px;
+    }
+    thead tr { background: #3b5bdb; color: #fff; }
+    thead th { padding: 9px 12px; text-align: left; font-weight: 600; }
+    tbody tr:nth-child(even) { background: #f4f6ff; }
+    tbody td { padding: 8px 12px; border-bottom: 1px solid #e8ecff; color: #333; vertical-align: top; }
+
+    /* ── Código ── */
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 6px;
+      padding: 16px 20px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 11.5px;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    code {
+      background: #eef0ff;
+      color: #3b5bdb;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 11.5px;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+
+    /* Syntax highlight tokens */
+    .kw  { color: #cba6f7; }
+    .ty  { color: #89dceb; }
+    .str { color: #a6e3a1; }
+    .cm  { color: #6c7086; font-style: italic; }
+    .fn  { color: #89b4fa; }
+    .num { color: #fab387; }
+
+    /* ── Diagrama de flujo ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .flow-box {
+      background: #3b5bdb;
+      color: #fff;
+      padding: 9px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .flow-arrow {
+      font-size: 18px;
+      color: #3b5bdb;
+      padding: 0 6px;
+      font-weight: 700;
+    }
+    .flow-label {
+      font-size: 10px;
+      color: #888;
+      display: block;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .flow-step { display: flex; flex-direction: column; align-items: center; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .badge.new { background: #d3f9d8; color: #2f9e44; }
+    .badge.updated { background: #fff3bf; color: #e67700; }
+    .badge.fixed { background: #ffe0e0; color: #c92a2a; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 60px;
+      padding-top: 16px;
+      border-top: 1px solid #e8ecff;
+      font-size: 11px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    @media print {
+      body { padding: 24px 32px; }
+      .toc { break-inside: avoid; }
+      section { break-inside: avoid; }
+      pre { white-space: pre-wrap; word-break: break-all; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>Notification Hub — Documentación de Cambios</h1>
+  <p class="subtitle">Refactorización técnica: DTOs, corrección de bugs y RBAC en base de datos</p>
+  <div class="meta">
+    <span>📅 Fecha: 02 de junio de 2026</span>
+    <span>🛠 Stack: Node.js · TypeScript · Prisma · PostgreSQL · Express</span>
+  </div>
+</div>
+
+<!-- TABLA DE CONTENIDOS -->
+<div class="toc">
+  <h2>Tabla de contenidos</h2>
+  <ol>
+    <li><a href="#s1">Implementación de DTOs</a></li>
+    <li><a href="#s2">Corrección — métricas sin usuarios sin mensajes</a></li>
+    <li><a href="#s3">RBAC — permisos en base de datos</a></li>
+    <li><a href="#s4">Archivos modificados</a></li>
+    <li><a href="#s5">Comandos para aplicar los cambios</a></li>
+  </ol>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 1 — DTOs
+════════════════════════════════════════════════ -->
+<section id="s1">
+  <h2 class="section-title">1 · Implementación de DTOs</h2>
+
+  <p>
+    Los <strong>Data Transfer Objects (DTOs)</strong> son objetos que definen la forma exacta de los datos
+    que entran y salen de cada capa de la aplicación. Su propósito es separar los modelos internos
+    de base de datos del contrato público de la API.
+  </p>
+
+  <div class="callout problem">
+    <strong>Problema anterior</strong>
+    Los controllers tenían los schemas de validación Zod duplicados. Los services retornaban tipos
+    crudos de Prisma directamente al cliente, lo que podía exponer campos sensibles como
+    <code>password</code>, y no había contratos explícitos entre capas.
+  </div>
+
+  <div class="callout solution">
+    <strong>Solución aplicada</strong>
+    Se creó la carpeta <code>src/dtos/</code> con dos archivos: <code>auth.dto.ts</code> y
+    <code>message.dto.ts</code>. Cada uno centraliza los schemas de validación de entrada
+    y las interfaces de salida, junto con funciones mapper que convierten modelos Prisma en DTOs.
+  </div>
+
+  <h3>Flujo de datos con DTOs</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-box">HTTP Request</div>
+      <span class="flow-label">JSON del cliente</span>
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">
+      <div class="flow-box">Zod Schema</div>
+      <span class="flow-label">Valida y tipea entrada</span>
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">
+      <div class="flow-box">Service</div>
+      <span class="flow-label">Lógica de negocio</span>
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">
+      <div class="flow-box">Mapper</div>
+      <span class="flow-label">Prisma → DTO</span>
+    </div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step">
+      <div class="flow-box">HTTP Response</div>
+      <span class="flow-label">JSON limpio al cliente</span>
+    </div>
+  </div>
+
+  <h3>auth.dto.ts — nuevo</h3>
+  <pre><code><span class="cm">// Request — schema de validación Zod (compartido entre register y login)</span>
+<span class="kw">export const</span> <span class="fn">authRequestSchema</span> = z.<span class="fn">object</span>({
+  username: z.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">3</span>),
+  password: z.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">6</span>),
+});
+
+<span class="cm">// Response — el usuario nunca expone su contraseña</span>
+<span class="kw">export interface</span> <span class="ty">AuthUserResponseDto</span> {
+  id:       <span class="ty">string</span>;
+  username: <span class="ty">string</span>;
+  role:     <span class="ty">Role</span>;
+}
+
+<span class="cm">// Mapper: convierte el modelo Prisma User → DTO seguro</span>
+<span class="kw">export const</span> <span class="fn">toAuthUserResponse</span> = (
+  user: <span class="ty">Pick</span>&lt;<span class="ty">User</span>, <span class="str">'id'</span> | <span class="str">'username'</span> | <span class="str">'role'</span>&gt;
+): <span class="ty">AuthUserResponseDto</span> => ({
+  id: user.id, username: user.username, role: user.role,
+});</code></pre>
+
+  <h3>message.dto.ts — nuevo</h3>
+  <pre><code><span class="cm">// Request — envío de mensaje</span>
+<span class="kw">export const</span> <span class="fn">sendMessageRequestSchema</span> = z.<span class="fn">object</span>({
+  content:   z.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">1</span>),
+  platforms: z.<span class="fn">array</span>(z.<span class="fn">nativeEnum</span>(<span class="ty">Platform</span>)).<span class="fn">min</span>(<span class="num">1</span>),
+});
+
+<span class="cm">// Request — filtros de consulta (convierte strings a Date automáticamente)</span>
+<span class="kw">export const</span> <span class="fn">messageFiltersSchema</span> = z.<span class="fn">object</span>({
+  status:   z.<span class="fn">nativeEnum</span>(<span class="ty">MessageStatus</span>).<span class="fn">optional</span>(),
+  platform: z.<span class="fn">nativeEnum</span>(<span class="ty">Platform</span>).<span class="fn">optional</span>(),
+  from:     z.coerce.<span class="fn">date</span>().<span class="fn">optional</span>(),
+  to:       z.coerce.<span class="fn">date</span>().<span class="fn">optional</span>(),
+});
+
+<span class="cm">// Response — forma pública del mensaje (sin datos internos de BD)</span>
+<span class="kw">export interface</span> <span class="ty">MessageResponseDto</span> {
+  id:         <span class="ty">string</span>;
+  content:    <span class="ty">string</span>;
+  createdAt:  <span class="ty">Date</span>;
+  deliveries: <span class="ty">DeliveryResponseDto</span>[];
+}</code></pre>
+
+  <h3>Impacto en controllers y services</h3>
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Cambio</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>auth.controller.ts</code></td>
+        <td>Eliminado el schema local Zod. Ahora importa <code>authRequestSchema</code> desde el DTO.</td>
+      </tr>
+      <tr>
+        <td><code>message.controller.ts</code></td>
+        <td>Eliminados schemas locales. Usa <code>sendMessageRequestSchema</code> y <code>messageFiltersSchema</code>. Se agregó manejo de errores faltante en <code>getMessages</code> y <code>getMetrics</code>.</td>
+      </tr>
+      <tr>
+        <td><code>auth.service.ts</code></td>
+        <td>Retorna <code>Promise&lt;AuthUserResponseDto&gt;</code> y <code>Promise&lt;TokenResponseDto&gt;</code>. Usa el mapper <code>toAuthUserResponse()</code>.</td>
+      </tr>
+      <tr>
+        <td><code>message.service.ts</code></td>
+        <td>Retorna <code>Promise&lt;MessageResponseDto&gt;</code>, <code>Promise&lt;MessageResponseDto[]&gt;</code> y <code>Promise&lt;MetricResponseDto[]&gt;</code>. Usa mappers del DTO.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 2 — BUG FIX
+════════════════════════════════════════════════ -->
+<section id="s2">
+  <h2 class="section-title">2 · Corrección — métricas sin usuarios sin mensajes</h2>
+
+  <div class="callout problem">
+    <strong>Bug identificado</strong>
+    El endpoint <code>GET /messages/metrics</code> no mostraba usuarios que nunca habían enviado
+    un mensaje. La función <code>getAdminMetrics()</code> construía el mapa de resultados
+    iterando mensajes, por lo que los usuarios sin mensajes nunca aparecían en la respuesta.
+  </div>
+
+  <h3>Causa raíz</h3>
+  <pre><code><span class="cm">// ❌ Antes — el mapa se construye desde mensajes</span>
+<span class="kw">const</span> messages = <span class="kw">await</span> <span class="fn">getAllMessages</span>();
+
+<span class="kw">for</span> (<span class="kw">const</span> msg <span class="kw">of</span> messages) {
+  <span class="cm">// Si un usuario no tiene mensajes, nunca entra acá → no aparece en el resultado</span>
+  <span class="kw">if</span> (!metricsMap[msg.userId]) {
+    metricsMap[msg.userId] = { username: msg.user.username, total: <span class="num">0</span>, todayCount: <span class="num">0</span> };
+  }
+}</code></pre>
+
+  <h3>Corrección aplicada</h3>
+  <pre><code><span class="cm">// ✅ Ahora — se parte desde todos los usuarios</span>
+<span class="kw">const</span> [users, messages] = <span class="kw">await</span> <span class="ty">Promise</span>.<span class="fn">all</span>([<span class="fn">getAllUsers</span>(), <span class="fn">getAllMessages</span>()]);
+
+<span class="cm">// Todos los usuarios entran al mapa con total 0</span>
+<span class="kw">const</span> metricsMap = <span class="ty">Object</span>.<span class="fn">fromEntries</span>(
+  users.<span class="fn">map</span>((u) => [u.id, { username: u.username, total: <span class="num">0</span>, todayCount: <span class="num">0</span> }])
+);
+
+<span class="cm">// Los mensajes suman sobre el mapa ya existente</span>
+<span class="kw">for</span> (<span class="kw">const</span> msg <span class="kw">of</span> messages) {
+  <span class="kw">const</span> entry = metricsMap[msg.userId];
+  <span class="kw">if</span> (!entry) <span class="kw">continue</span>;
+  entry.total++;
+  <span class="kw">if</span> (msg.createdAt >= start) entry.todayCount++;
+}</code></pre>
+
+  <h3>Archivos modificados</h3>
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Cambio</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/repositories/user.repository.ts</code></td>
+        <td>Nueva función <code>getAllUsers()</code> que trae <code>id</code> y <code>username</code> de todos los usuarios, ordenados alfabéticamente.</td>
+      </tr>
+      <tr>
+        <td><code>src/services/message.service.ts</code></td>
+        <td>
+          <code>getAdminMetrics()</code> ahora hace <code>Promise.all</code> para cargar
+          usuarios y mensajes en paralelo, y construye el mapa desde usuarios.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <strong>Beneficio adicional</strong>
+    Al usar <code>Promise.all</code>, las dos consultas a la BD se ejecutan en paralelo en lugar
+    de secuencialmente, reduciendo el tiempo de respuesta del endpoint.
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 3 — RBAC
+════════════════════════════════════════════════ -->
+<section id="s3">
+  <h2 class="section-title">3 · RBAC — permisos en base de datos</h2>
+
+  <p>
+    <strong>RBAC (Role-Based Access Control)</strong> es un modelo de control de acceso donde los
+    permisos se asignan a roles, y los roles a usuarios. Implementarlo en base de datos permite
+    modificar permisos sin necesidad de cambiar código ni hacer deploy.
+  </p>
+
+  <div class="callout problem">
+    <strong>Problema anterior</strong>
+    Los permisos estaban hardcodeados en <code>authorize.ts</code> como un objeto literal.
+    Cualquier cambio (nuevo permiso, nuevo rol, revocar acceso) requería modificar el código
+    fuente y redesplegar la aplicación.
+  </div>
+
+  <pre><code><span class="cm">// ❌ Antes — permisos quemados en el código</span>
+<span class="kw">const</span> ROLE_PERMISSIONS: <span class="ty">Record</span>&lt;<span class="ty">string</span>, <span class="ty">string</span>[]&gt; = {
+  ADMIN: [<span class="str">'*'</span>],
+  USER:  [<span class="str">'messages:create'</span>, <span class="str">'messages:read'</span>],
+};</code></pre>
+
+  <h3>Nuevos modelos en el schema de Prisma</h3>
+  <pre><code><span class="kw">model</span> <span class="ty">Permission</span> {
+  id          <span class="ty">String</span>  <span class="kw">@id @default</span>(uuid())
+  name        <span class="ty">String</span>  <span class="kw">@unique</span>          <span class="cm">// ej: "messages:create"</span>
+  description <span class="ty">String</span>?
+
+  rolePermissions <span class="ty">RolePermission</span>[]
+}
+
+<span class="kw">model</span> <span class="ty">RolePermission</span> {
+  role         <span class="ty">Role</span>
+  permissionId <span class="ty">String</span>
+  permission   <span class="ty">Permission</span> <span class="kw">@relation</span>(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  <span class="kw">@@id</span>([role, permissionId])
+}</code></pre>
+
+  <h3>Permisos definidos</h3>
+  <table>
+    <thead>
+      <tr><th>Permiso</th><th>Descripción</th><th>USER</th><th>ADMIN</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>messages:create</code></td>
+        <td>Enviar mensajes a plataformas</td>
+        <td>✓</td><td>✓</td>
+      </tr>
+      <tr>
+        <td><code>messages:read</code></td>
+        <td>Ver historial de mensajes propios</td>
+        <td>✓</td><td>✓</td>
+      </tr>
+      <tr>
+        <td><code>metrics:read</code></td>
+        <td>Ver métricas de todos los usuarios</td>
+        <td>—</td><td>✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Middleware authorize — con cache en memoria</h3>
+  <pre><code><span class="cm">// Cache cargado una vez desde BD. Se invalida llamando clearPermissionsCache().</span>
+<span class="kw">let</span> permissionsCache: <span class="ty">Map</span>&lt;<span class="ty">string</span>, <span class="ty">Set</span>&lt;<span class="ty">string</span>&gt;&gt; | <span class="kw">null</span> = <span class="kw">null</span>;
+
+<span class="kw">const</span> <span class="fn">loadPermissions</span> = <span class="kw">async</span> () => {
+  <span class="kw">if</span> (permissionsCache) <span class="kw">return</span> permissionsCache; <span class="cm">// usa cache</span>
+
+  <span class="kw">const</span> rows = <span class="kw">await</span> <span class="fn">getAllRolePermissions</span>();     <span class="cm">// consulta BD una sola vez</span>
+  <span class="kw">const</span> cache = <span class="kw">new</span> <span class="ty">Map</span>&lt;<span class="ty">string</span>, <span class="ty">Set</span>&lt;<span class="ty">string</span>&gt;&gt;();
+
+  <span class="kw">for</span> (<span class="kw">const</span> row <span class="kw">of</span> rows) {
+    <span class="kw">if</span> (!cache.<span class="fn">has</span>(row.role)) cache.<span class="fn">set</span>(row.role, <span class="kw">new</span> <span class="ty">Set</span>());
+    cache.<span class="fn">get</span>(row.role)!.<span class="fn">add</span>(row.permission.name);
+  }
+
+  permissionsCache = cache;
+  <span class="kw">return</span> permissionsCache;
+};</code></pre>
+
+  <div class="callout info">
+    <strong>¿Cómo funciona el cache?</strong>
+    En el primer request que requiera autorización, el middleware consulta la BD y guarda los
+    permisos en memoria. Todos los requests siguientes usan ese mapa sin tocar la BD.
+    Si se modifican permisos en la BD, se puede llamar a <code>clearPermissionsCache()</code>
+    para forzar una recarga.
+  </div>
+
+  <h3>Archivos nuevos y modificados</h3>
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Estado</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>prisma/schema.prisma</code></td>
+        <td><span class="badge updated">Modificado</span></td>
+        <td>Agregados modelos <code>Permission</code> y <code>RolePermission</code>.</td>
+      </tr>
+      <tr>
+        <td><code>prisma/migrations/20260602000000_add_rbac/</code></td>
+        <td><span class="badge new">Nuevo</span></td>
+        <td>SQL para crear las tablas en PostgreSQL.</td>
+      </tr>
+      <tr>
+        <td><code>src/repositories/permission.repository.ts</code></td>
+        <td><span class="badge new">Nuevo</span></td>
+        <td>Funciones <code>getAllRolePermissions()</code> y <code>getPermissionsByRole()</code>.</td>
+      </tr>
+      <tr>
+        <td><code>src/middlewares/authorize.ts</code></td>
+        <td><span class="badge updated">Modificado</span></td>
+        <td>Reemplazado el mapa hardcodeado por carga desde BD con cache en memoria.</td>
+      </tr>
+      <tr>
+        <td><code>src/seed.ts</code></td>
+        <td><span class="badge updated">Modificado</span></td>
+        <td>Pobla los permisos y asignaciones de rol al ejecutarse.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 4 — ARCHIVOS MODIFICADOS
+════════════════════════════════════════════════ -->
+<section id="s4">
+  <h2 class="section-title">4 · Resumen de archivos modificados</h2>
+  <table>
+    <thead>
+      <tr><th>Archivo</th><th>Estado</th><th>Motivo</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>src/dtos/auth.dto.ts</code></td><td><span class="badge new">Nuevo</span></td><td>Schemas, interfaces y mapper de autenticación</td></tr>
+      <tr><td><code>src/dtos/message.dto.ts</code></td><td><span class="badge new">Nuevo</span></td><td>Schemas, interfaces y mappers de mensajes</td></tr>
+      <tr><td><code>src/controllers/auth.controller.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Usa <code>authRequestSchema</code> desde el DTO</td></tr>
+      <tr><td><code>src/controllers/message.controller.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Usa schemas del DTO; agrega error handling en todos los handlers</td></tr>
+      <tr><td><code>src/services/auth.service.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Tipos de retorno explícitos; usa <code>toAuthUserResponse()</code></td></tr>
+      <tr><td><code>src/services/message.service.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Tipos de retorno explícitos; corrección de métricas; usa mappers</td></tr>
+      <tr><td><code>src/repositories/user.repository.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Nueva función <code>getAllUsers()</code></td></tr>
+      <tr><td><code>src/repositories/permission.repository.ts</code></td><td><span class="badge new">Nuevo</span></td><td>Consultas de permisos por rol</td></tr>
+      <tr><td><code>src/middlewares/authorize.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Permisos desde BD con cache en memoria</td></tr>
+      <tr><td><code>src/seed.ts</code></td><td><span class="badge updated">Modificado</span></td><td>Seed de permisos y asignaciones de rol</td></tr>
+      <tr><td><code>prisma/schema.prisma</code></td><td><span class="badge updated">Modificado</span></td><td>Modelos <code>Permission</code> y <code>RolePermission</code></td></tr>
+      <tr><td><code>prisma/migrations/20260602000000_add_rbac/</code></td><td><span class="badge new">Nuevo</span></td><td>Migración SQL para las tablas de RBAC</td></tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 5 — COMANDOS
+════════════════════════════════════════════════ -->
+<section id="s5">
+  <h2 class="section-title">5 · Comandos para aplicar los cambios</h2>
+
+  <p>Ejecutar los siguientes comandos con la base de datos corriendo:</p>
+
+  <pre><code><span class="cm"># 1. Aplicar la migración de RBAC a la BD</span>
+npx prisma migrate deploy
+
+<span class="cm"># 2. Poblar los permisos y el usuario admin</span>
+npx tsx src/seed.ts
+
+<span class="cm"># 3. Levantar el servidor</span>
+npm run dev</code></pre>
+
+  <div class="callout info">
+    <strong>Nota</strong>
+    El cliente de Prisma ya fue regenerado con <code>prisma generate</code>,
+    por lo que los nuevos modelos <code>Permission</code> y <code>RolePermission</code>
+    ya están disponibles en el código TypeScript.
+  </div>
+</section>
+
+
+<footer>
+  Notification Hub · Documentación técnica interna · 2026
+</footer>
+
+</body>
+</html>
