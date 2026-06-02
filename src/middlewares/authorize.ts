@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from './auth.middleware';
 import { getAllRolePermissions } from '../repositories/permission.repository';
+import HttpError from '../errors/HttpError';
 
 // Cache cargado una vez desde BD. Se invalida llamando clearPermissionsCache().
 let permissionsCache: Map<string, Set<string>> | null = null;
@@ -44,7 +45,7 @@ export const authorize = (...required: string[]) => {
 
       next();
     } catch {
-      next(new Error('Failed to load permissions'));
+      next(new HttpError('Failed to load permissions', 500, 'INTERNAL_SERVER_ERROR'));
     }
   };
 };

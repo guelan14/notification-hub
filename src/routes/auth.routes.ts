@@ -29,6 +29,10 @@ const router = Router();
  *     responses:
  *       201:
  *         description: User created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthUserResponse'
  *       400:
  *         description: Validation error
  *         content:
@@ -80,6 +84,10 @@ router.post('/register', authController.register);
  *     responses:
  *       200:
  *         description: JWT token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TokenResponse'
  *       400:
  *         description: Validation error
  *         content:

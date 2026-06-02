@@ -17,7 +17,7 @@ describe('notification.service', () => {
   it('routes messages to Slack provider', async () => {
     mockSendSlack.mockResolvedValue('Status 200');
 
-    const results = await notificationService.sendToplatforms('hello', 'testuser', ['SLACK'] as any);
+    const results = await notificationService.sendToPlatforms('hello', 'testuser', ['SLACK'] as any);
 
     expect(mockSendSlack).toHaveBeenCalledWith('hello', 'testuser');
     expect(results).toEqual([
@@ -28,7 +28,7 @@ describe('notification.service', () => {
   it('returns FAILED when provider throws', async () => {
     mockSendDiscord.mockRejectedValue(new Error('Webhook error'));
 
-    const results = await notificationService.sendToplatforms('hello', 'testuser', ['DISCORD'] as any);
+    const results = await notificationService.sendToPlatforms('hello', 'testuser', ['DISCORD'] as any);
 
     expect(results[0].status).toBe('FAILED');
     expect(results[0].providerResponse).toContain('Webhook error');
@@ -38,7 +38,7 @@ describe('notification.service', () => {
     mockSendSlack.mockResolvedValue('Status 200');
     mockSendTelegram.mockResolvedValue('Status 200');
 
-    const results = await notificationService.sendToplatforms('hello', 'testuser', ['SLACK', 'TELEGRAM'] as any);
+    const results = await notificationService.sendToPlatforms('hello', 'testuser', ['SLACK', 'TELEGRAM'] as any);
 
     expect(mockSendSlack).toHaveBeenCalledWith('hello', 'testuser');
     expect(mockSendTelegram).toHaveBeenCalledWith('hello', 'testuser');

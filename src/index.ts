@@ -9,6 +9,14 @@ import HttpError from './errors/HttpError';
 
 dotenv.config();
 
+const REQUIRED_ENV = ['JWT_SECRET'] as const;
+for (const key of REQUIRED_ENV) {
+  if (!process.env[key]) {
+    console.error(`Missing required env var: ${key}`);
+    process.exit(1);
+  }
+}
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

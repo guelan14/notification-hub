@@ -27,10 +27,3 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
   }
 };
 
-export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
-  if (req.user?.role !== 'ADMIN') {
-    res.status(403).json({ error: 'Admin access required' });
-    return;
-  }
-  next();
-};

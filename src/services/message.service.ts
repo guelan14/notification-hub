@@ -1,5 +1,5 @@
 import { Platform, MessageStatus } from '@prisma/client';
-import { sendToplatforms } from './notification.service';
+import { sendToPlatforms } from './notification.service';
 import {
   createMessage,
   getMessagesByUser,
@@ -37,7 +37,7 @@ export const sendMessage = async (
     throw new HttpError(err.message, err.status, err.code);
   }
 
-  const results = await sendToplatforms(content, user.username, platforms);
+  const results = await sendToPlatforms(content, user.username, platforms);
 
   const deliveries = results.map((r) => ({
     platform: r.platform,

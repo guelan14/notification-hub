@@ -11,7 +11,7 @@ export interface DeliveryResult {
   providerResponse: string;
 }
 
-export const sendToplatforms = async (
+export const sendToPlatforms = async (
   content: string,
   username: string,
   platforms: Platform[]

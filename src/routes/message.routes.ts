@@ -35,6 +35,10 @@ router.use(authenticate);
  *     responses:
  *       201:
  *         description: Message sent and persisted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MessageResponse'
  *       400:
  *         description: Validation error
  *         content:
@@ -106,6 +110,10 @@ router.post('/', messageController.sendMessage);
  *     responses:
  *       200:
  *         description: List of messages
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PaginatedMessageResponse'
  *       401:
  *         description: Unauthorized
  *         content:
@@ -138,6 +146,12 @@ router.get('/', messageController.getMessages);
  *     responses:
  *       200:
  *         description: Metrics per user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/MetricResponse'
  *       401:
  *         description: Unauthorized
  *         content:

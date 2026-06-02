@@ -9,7 +9,7 @@ jest.mock('../services/notification.service');
 
 const mockCountToday      = messageRepository.countTodayMessages as jest.Mock;
 const mockFindUser        = userRepository.findUserById as jest.Mock;
-const mockSendTo          = notificationService.sendToplatforms as jest.Mock;
+const mockSendTo          = notificationService.sendToPlatforms as jest.Mock;
 const mockCreateMessage   = messageRepository.createMessage as jest.Mock;
 const mockGetMessages     = messageRepository.getMessagesByUser as jest.Mock;
 const mockGetAllUsers     = userRepository.getAllUsers as jest.Mock;
