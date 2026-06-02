@@ -2,12 +2,14 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import * as messageService from '../services/message.service';
 import { sendMessageRequestSchema, messageFiltersSchema } from '../dtos/message.dto';
+import HttpError from '../errors/HttpError';
+import { ERROR_CODES } from '../constants/errors';
 
 export const sendMessage = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const result = sendMessageRequestSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ error: result.error.flatten() });
-    return;
+    const err = ERROR_CODES.VALIDATION_ERROR;
+    return next(new HttpError(err.message, err.status, err.code, result.error.flatten()));
   }
 
   try {
@@ -25,8 +27,8 @@ export const sendMessage = async (req: AuthRequest, res: Response, next: NextFun
 export const getMessages = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const result = messageFiltersSchema.safeParse(req.query);
   if (!result.success) {
-    res.status(400).json({ error: result.error.flatten() });
-    return;
+    const err = ERROR_CODES.VALIDATION_ERROR;
+    return next(new HttpError(err.message, err.status, err.code, result.error.flatten()));
   }
 
   try {

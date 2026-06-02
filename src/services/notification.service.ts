@@ -1,9 +1,7 @@
 import { sendDiscordMessage } from './discord.service';
 import { sendSlackMessage } from './slack.service';
 import { sendTelegramMessage } from './telegram.service';
-import { Platform as PrismaPlatform } from '@prisma/client';
-
-export type Platform = PrismaPlatform;
+import { Platform } from '@prisma/client';
 
 export interface DeliveryResult {
   platform: Platform;

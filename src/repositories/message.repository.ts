@@ -65,13 +65,6 @@ export const getMessagesByUser = async (
   return { messages, total };
 };
 
-export const getAllMessages = async () => {
-  return prisma.message.findMany({
-    include: { deliveries: true, user: { select: { username: true } } },
-    orderBy: { createdAt: 'desc' },
-  });
-};
-
 export const getMessageCountsGroupedByUser = async () => {
   return prisma.message.groupBy({
     by: ['userId'],

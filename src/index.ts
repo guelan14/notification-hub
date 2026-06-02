@@ -9,7 +9,7 @@ import HttpError from './errors/HttpError';
 
 dotenv.config();
 
-const REQUIRED_ENV = ['JWT_SECRET'] as const;
+const REQUIRED_ENV = ['JWT_SECRET', 'DISCORD_WEBHOOK_URL', 'SLACK_WEBHOOK_URL', 'TELEGRAM_BOT_TOKEN', 'TELEGRAM_CHAT_ID'] as const;
 for (const key of REQUIRED_ENV) {
   if (!process.env[key]) {
     console.error(`Missing required env var: ${key}`);

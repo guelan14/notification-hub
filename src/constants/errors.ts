@@ -1,4 +1,3 @@
-// Error codes and messages
 export const ERROR_CODES = {
   // Auth errors
   AUTH_USERNAME_TAKEN: {
@@ -15,6 +14,16 @@ export const ERROR_CODES = {
     code: 'AUTH_JWT_SECRET_MISSING',
     message: 'Internal server configuration error',
     status: 500,
+  },
+  AUTH_UNAUTHORIZED: {
+    code: 'AUTH_UNAUTHORIZED',
+    message: 'Authentication required',
+    status: 401,
+  },
+  AUTH_FORBIDDEN: {
+    code: 'AUTH_FORBIDDEN',
+    message: 'Forbidden',
+    status: 403,
   },
 
   // Message errors
@@ -34,11 +43,6 @@ export const ERROR_CODES = {
     code: 'DB_CONNECTION_ERROR',
     message: 'Database connection error',
     status: 503,
-  },
-  DB_QUERY_ERROR: {
-    code: 'DB_QUERY_ERROR',
-    message: 'Database query error',
-    status: 500,
   },
 
   // Validation errors

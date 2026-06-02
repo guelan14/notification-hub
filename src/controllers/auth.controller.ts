@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/auth.service';
 import { authRequestSchema } from '../dtos/auth.dto';
+import HttpError from '../errors/HttpError';
+import { ERROR_CODES } from '../constants/errors';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   const result = authRequestSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ error: result.error.flatten() });
-    return;
+    const err = ERROR_CODES.VALIDATION_ERROR;
+    return next(new HttpError(err.message, err.status, err.code, result.error.flatten()));
   }
 
   try {
@@ -20,8 +22,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   const result = authRequestSchema.safeParse(req.body);
   if (!result.success) {
-    res.status(400).json({ error: result.error.flatten() });
-    return;
+    const err = ERROR_CODES.VALIDATION_ERROR;
+    return next(new HttpError(err.message, err.status, err.code, result.error.flatten()));
   }
 
   try {

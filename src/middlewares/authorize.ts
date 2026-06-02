@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from './auth.middleware';
 import { getAllRolePermissions } from '../repositories/permission.repository';
 import HttpError from '../errors/HttpError';
+import { ERROR_CODES } from '../constants/errors';
 
 // Cache cargado una vez desde BD. Se invalida llamando clearPermissionsCache().
 let permissionsCache: Map<string, Set<string>> | null = null;
@@ -26,11 +27,11 @@ export const clearPermissionsCache = () => {
 };
 
 export const authorize = (...required: string[]) => {
-  return async (req: AuthRequest, res: Response, next: NextFunction) => {
+  return async (req: AuthRequest, _res: Response, next: NextFunction) => {
     const role = req.user?.role;
     if (!role) {
-      res.status(401).json({ error: 'Unauthorized' });
-      return;
+      const err = ERROR_CODES.AUTH_UNAUTHORIZED;
+      return next(new HttpError(err.message, err.status, err.code));
     }
 
     try {
@@ -39,8 +40,8 @@ export const authorize = (...required: string[]) => {
       const ok = required.every((r) => rolePerms.has(r));
 
       if (!ok) {
-        res.status(403).json({ error: 'Forbidden' });
-        return;
+        const err = ERROR_CODES.AUTH_FORBIDDEN;
+        return next(new HttpError(err.message, err.status, err.code));
       }
 
       next();

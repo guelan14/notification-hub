@@ -9,7 +9,6 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  void _next;
   // Prisma error detection (KnownRequestError, InitializationError, etc.)
   if (err && typeof err === 'object' && 'name' in err && typeof err.name === 'string' && err.name.startsWith('Prisma')) {
     logger.error(err);
@@ -23,7 +22,7 @@ export const errorHandler = (
   if (err instanceof HttpError) {
     logger.error(err);
     const payload: Record<string, unknown> = { error: err.message, code: err.code };
-    if (err.details && process.env.NODE_ENV !== 'production') payload.details = err.details;
+    if (err.details) payload.details = err.details;
     if (process.env.NODE_ENV !== 'production') payload.stack = (err as Error).stack;
     res.status(err.status).json(payload);
     return;
