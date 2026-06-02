@@ -18,4 +18,4 @@ RUN pnpm build && ls dist/
 
 EXPOSE 3000
 
-CMD sh -c "pnpm exec prisma migrate deploy && node dist/src/index.js"
+CMD sh -c "pnpm exec prisma migrate deploy 2>&1 && node dist/src/index.js"
