@@ -12,21 +12,24 @@ Desarrollado por **Neumann Miguel Angel**
 
 ## Stack
 
-| Categoría     | Tecnología               |
-| ------------- | ------------------------ |
-| Runtime       | Node.js 24               |
-| Lenguaje      | TypeScript               |
-| Framework     | Express.js               |
-| Base de datos | PostgreSQL               |
-| ORM           | Prisma 7                 |
-| Autenticación | JWT + bcrypt             |
-| Validaciones  | Zod                      |
-| HTTP Client   | Axios                    |
-| Documentación | Swagger UI (OpenAPI 3.0) |
-| Testing       | Jest + ts-jest           |
-| Contenedores  | Docker + Docker Compose  |
-| CI/CD         | GitHub Actions           |
-| Deploy        | Render                   |
+| Categoría            | Tecnología               |
+| -------------------- | ------------------------ |
+| Runtime              | Node.js 24               |
+| Lenguaje             | TypeScript 6             |
+| Framework            | Express.js 5             |
+| Base de datos        | PostgreSQL               |
+| ORM                  | Prisma 7                 |
+| Autenticación        | JWT + bcrypt             |
+| Autorización         | RBAC (permisos en DB)    |
+| Validaciones         | Zod 4                    |
+| HTTP Client          | Axios                    |
+| Documentación        | Swagger UI (OpenAPI 3.0) |
+| Testing              | Jest + ts-jest + Supertest |
+| Linting / Formato    | ESLint + Prettier        |
+| Git hooks            | Husky + commitlint       |
+| Contenedores         | Docker + Docker Compose  |
+| CI/CD                | GitHub Actions           |
+| Deploy               | Render                   |
 
 ---
 
@@ -37,17 +40,26 @@ Arquitectura en capas con separación de responsabilidades:
 ```
 src/
 ├── config/          # Prisma client, Swagger
+├── constants/       # Constantes compartidas
 ├── controllers/     # Manejo de requests/responses
-├── middlewares/     # JWT auth, control de roles
+├── dtos/            # Esquemas de validación de entrada/salida (Zod)
+├── errors/          # Clases de error personalizadas y códigos de error
+├── middlewares/     # JWT auth, autorización por permisos
 ├── repositories/    # Acceso a base de datos
 ├── routes/          # Definición de endpoints y documentación OpenAPI
 ├── services/        # Lógica de negocio e integraciones externas
+├── utils/           # Utilidades compartidas
+├── __tests__/       # Tests unitarios e integración
 └── index.ts
 ```
 
 ```
 Request → Route → Middleware → Controller → Service → Repository → DB
 ```
+
+### Autorización (RBAC)
+
+Los permisos se almacenan en base de datos y se cachean en memoria al iniciar. Cada endpoint protegido requiere un permiso específico (ej: `metrics:read`). Los roles determinan qué permisos tiene cada usuario.
 
 ---
 
@@ -116,13 +128,16 @@ SLACK_WEBHOOK_URL=
 | GET    | `/messages`         | Listar mensajes propios con filtros    | JWT         |
 | GET    | `/messages/metrics` | Métricas por usuario (solo admin)      | JWT + Admin |
 
-**Filtros disponibles en `GET /messages`:**
+**Filtros y paginación disponibles en `GET /messages`:**
 
 ```
 ?status=SUCCESS|FAILED|PENDING
 ?platform=DISCORD|TELEGRAM|SLACK
 ?from=2026-01-01&to=2026-12-31
+?page=1&limit=20
 ```
+
+`limit` acepta valores entre 1 y 100 (por defecto 20).
 
 ---
 
