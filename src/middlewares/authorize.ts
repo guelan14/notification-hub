@@ -4,11 +4,15 @@ import { getAllRolePermissions } from '../repositories/permission.repository';
 import HttpError from '../errors/HttpError';
 import { ERROR_CODES } from '../constants/errors';
 
-// Cache cargado una vez desde BD. Se invalida llamando clearPermissionsCache().
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutos
+
 let permissionsCache: Map<string, Set<string>> | null = null;
+let cacheLoadedAt: number | null = null;
 
 const loadPermissions = async (): Promise<Map<string, Set<string>>> => {
-  if (permissionsCache) return permissionsCache;
+  const expired = cacheLoadedAt !== null && Date.now() - cacheLoadedAt > CACHE_TTL_MS;
+
+  if (permissionsCache && !expired) return permissionsCache;
 
   const rows = await getAllRolePermissions();
   const cache = new Map<string, Set<string>>();
@@ -19,11 +23,13 @@ const loadPermissions = async (): Promise<Map<string, Set<string>>> => {
   }
 
   permissionsCache = cache;
+  cacheLoadedAt = Date.now();
   return permissionsCache;
 };
 
 export const clearPermissionsCache = () => {
   permissionsCache = null;
+  cacheLoadedAt = null;
 };
 
 export const authorize = (...required: string[]) => {
